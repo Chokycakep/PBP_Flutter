@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'detail.dart'; // ✅ ubah dari 'pages/detail_page.dart' ke 'detail.dart'
+import 'detail.dart'; // ✅ hanya butuh CakeListPage
 import 'cart_page.dart';
-// tetap karena kamu sudah pisahkan cart di folder pages
+import 'order_history.dart';
 
 class HomePage extends StatelessWidget {
   final String userName;
@@ -61,6 +61,19 @@ class HomePage extends StatelessWidget {
               },
             ),
             ListTile(
+              leading: const Icon(Icons.history),
+              title: const Text("Riwayat Pesanan"),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const OrderHistoryPage(),
+                  ),
+                );
+              },
+            ),
+            ListTile(
               leading: const Icon(Icons.logout),
               title: const Text("Logout"),
               onTap: () {
@@ -78,7 +91,7 @@ class HomePage extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Text(
-              "Selamat datang, $userName! 🍩\nSelamat belanjaa 🎉",
+              "Selamat datang, $userName! 🍩\nSelamat belanja 🎉",
               style: const TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
@@ -87,32 +100,29 @@ class HomePage extends StatelessWidget {
             ),
           ),
 
-          // Daftar produk
+          // Hanya 1 menu utama: semua kategori
           Expanded(
-            child: ListView.builder(
-              itemCount: DetailPage.cakes.length,
-              itemBuilder: (context, index) {
-                final cake = DetailPage.cakes[index];
-                return Card(
+            child: ListView(
+              children: [
+                Card(
                   margin:
                       const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                   child: ListTile(
                     leading: const Icon(Icons.cake, color: Color(0xFFA47551)),
-                    title: Text(cake.name),
-                    subtitle: Text("Rp ${cake.price}"),
+                    title: const Text("Lihat Semua Menu & Kategori"),
                     trailing: const Icon(Icons.arrow_forward_ios_rounded,
                         color: Color(0xFFA47551), size: 18),
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const DetailPage(),
+                          builder: (context) => const CakeListPage(),
                         ),
                       );
                     },
                   ),
-                );
-              },
+                ),
+              ],
             ),
           ),
         ],

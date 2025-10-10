@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import '../models/cart_model.dart';
-import 'package:intl/intl.dart';
+import 'order_history.dart'; // ✅ Import halaman riwayat pesanan
 
 class CheckoutDetail extends StatefulWidget {
   final int totalHarga;
+
   const CheckoutDetail({super.key, required this.totalHarga});
 
   @override
@@ -11,159 +12,142 @@ class CheckoutDetail extends StatefulWidget {
 }
 
 class _CheckoutDetailState extends State<CheckoutDetail> {
-  final _formKey = GlobalKey<FormState>();
-  final _nameController = TextEditingController();
-  final _addressController = TextEditingController();
-  final _phoneController = TextEditingController();
-  String? metodePembayaran = "COD";
+  final TextEditingController namaController = TextEditingController();
+  final TextEditingController alamatController = TextEditingController();
+  String metodePembayaran = 'Transfer Bank';
 
   @override
   Widget build(BuildContext context) {
-    final cart = CartModel.cartItems;
-    final totalHarga = widget.totalHarga;
-    final format = NumberFormat.currency(locale: 'id_ID', symbol: 'Rp ');
-
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Checkout"),
+        title: const Text("Detail Checkout"),
         backgroundColor: const Color(0xFFA47551),
         foregroundColor: Colors.white,
       ),
       backgroundColor: const Color(0xFFF5E1C0),
-      body: SingleChildScrollView(
-        padding: const EdgeInsets.all(16),
-        child: Form(
-          key: _formKey,
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Text("Data Pembeli",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-              const SizedBox(height: 12),
-              TextFormField(
-                controller: _nameController,
-                decoration: const InputDecoration(
-                  labelText: "Nama Lengkap",
-                  border: OutlineInputBorder(),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            const Text(
+              "Nama Pemesan",
+              style: TextStyle(color: Color(0xFF4E342E)),
+            ),
+            TextField(
+              controller: namaController,
+              decoration: const InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
+                hintText: "Masukkan nama lengkap",
+              ),
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              "Alamat Pengiriman",
+              style: TextStyle(color: Color(0xFF4E342E)),
+            ),
+            TextField(
+              controller: alamatController,
+              decoration: const InputDecoration(
+                filled: true,
+                fillColor: Colors.white,
+                hintText: "Masukkan alamat lengkap",
+              ),
+            ),
+            const SizedBox(height: 16),
+            const Text(
+              "Metode Pembayaran",
+              style: TextStyle(color: Color(0xFF4E342E)),
+            ),
+            DropdownButton<String>(
+              value: metodePembayaran,
+              isExpanded: true,
+              items: const [
+                DropdownMenuItem(
+                  value: 'Transfer Bank',
+                  child: Text("Transfer Bank"),
                 ),
-                validator: (value) =>
-                    value!.isEmpty ? "Nama harus diisi" : null,
-              ),
-              const SizedBox(height: 12),
-              TextFormField(
-                controller: _phoneController,
-                decoration: const InputDecoration(
-                  labelText: "Nomor Telepon",
-                  border: OutlineInputBorder(),
+                DropdownMenuItem(
+                  value: 'COD (Bayar di Tempat)',
+                  child: Text("COD (Bayar di Tempat)"),
                 ),
-                keyboardType: TextInputType.phone,
-                validator: (value) =>
-                    value!.isEmpty ? "Nomor telepon harus diisi" : null,
-              ),
-              const SizedBox(height: 12),
-              TextFormField(
-                controller: _addressController,
-                decoration: const InputDecoration(
-                  labelText: "Alamat Pengiriman",
-                  border: OutlineInputBorder(),
+                DropdownMenuItem(
+                  value: 'E-Wallet',
+                  child: Text("E-Wallet"),
                 ),
-                maxLines: 2,
-                validator: (value) =>
-                    value!.isEmpty ? "Alamat harus diisi" : null,
-              ),
-              const SizedBox(height: 20),
-              const Text("Metode Pembayaran",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-              RadioListTile(
-                value: "COD",
-                groupValue: metodePembayaran,
-                title: const Text("Bayar di Tempat (COD)"),
-                onChanged: (value) {
-                  setState(() {
-                    metodePembayaran = value.toString();
-                  });
-                },
-              ),
-              RadioListTile(
-                value: "Transfer Bank",
-                groupValue: metodePembayaran,
-                title: const Text("Transfer Bank"),
-                onChanged: (value) {
-                  setState(() {
-                    metodePembayaran = value.toString();
-                  });
-                },
-              ),
-              RadioListTile(
-                value: "E-Wallet",
-                groupValue: metodePembayaran,
-                title: const Text("E-Wallet (DANA / OVO / GoPay)"),
-                onChanged: (value) {
-                  setState(() {
-                    metodePembayaran = value.toString();
-                  });
-                },
-              ),
-              const SizedBox(height: 20),
-              const Text("Ringkasan Pesanan",
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 18)),
-              const SizedBox(height: 8),
-              ...cart.map((item) => ListTile(
-                    title: Text(item.name),
-                    subtitle: Text(format.format(item.price)),
-                  )),
-              const Divider(),
-              Text("Total: ${format.format(totalHarga)}",
-                  style: const TextStyle(
-                      fontSize: 16, fontWeight: FontWeight.bold)),
-              const SizedBox(height: 24),
-              Center(
-                child: ElevatedButton(
-                  onPressed: () {
-                    if (_formKey.currentState!.validate()) {
-                      showDialog(
-                        context: context,
-                        builder: (context) => AlertDialog(
-                          title: const Text("Pesanan Berhasil 🎉"),
-                          content: Text(
-                            "Terima kasih ${_nameController.text}!\n"
-                            "Pesanan kamu akan dikirim ke ${_addressController.text}.\n\n"
-                            "Metode pembayaran: $metodePembayaran\n"
-                            "Total: ${format.format(totalHarga)}",
-                          ),
-                          actions: [
-                            TextButton(
-                              onPressed: () {
-                                // ✅ Simpan riwayat pesanan
-                                CartModel.addOrder(
-                                  customerName: _nameController.text,
-                                  address: _addressController.text,
-                                  paymentMethod: metodePembayaran!,
-                                  total: totalHarga,
-                                );
-
-                                CartModel.clearCart(); // Kosongkan keranjang
-                                Navigator.pop(context);
-                                Navigator.pop(context);
-                              },
-                              child: const Text("OK"),
-                            ),
-                          ],
-                        ),
-                      );
-                    }
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: const Color(0xFFA47551),
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 32, vertical: 14),
+              ],
+              onChanged: (value) {
+                setState(() {
+                  metodePembayaran = value!;
+                });
+              },
+            ),
+            const SizedBox(height: 24),
+            Center(
+              child: Column(
+                children: [
+                  Text(
+                    "Total Pembayaran: Rp ${widget.totalHarga}",
+                    style: const TextStyle(
+                      fontWeight: FontWeight.bold,
+                      color: Color(0xFF4E342E),
+                      fontSize: 18,
+                    ),
                   ),
-                  child: const Text("Konfirmasi Pesanan"),
-                ),
+                  const SizedBox(height: 20),
+                  ElevatedButton(
+                    onPressed: () {
+                      if (namaController.text.isEmpty ||
+                          alamatController.text.isEmpty) {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(
+                            content: Text(
+                                "Harap isi nama dan alamat terlebih dahulu."),
+                            backgroundColor: Color(0xFFA47551),
+                          ),
+                        );
+                        return;
+                      }
+
+                      // ✅ Simpan pesanan ke riwayat
+                      CartModel.addOrder(
+                        customerName: namaController.text,
+                        address: alamatController.text,
+                        paymentMethod: metodePembayaran,
+                        total: widget.totalHarga,
+                      );
+
+                      // ✅ Kosongkan keranjang setelah checkout
+                      CartModel.clearCart();
+
+                      // ✅ Navigasi ke halaman Riwayat Pesanan
+                      // dan hapus semua halaman sebelumnya (tidak kembali ke keranjang)
+                      Navigator.pushAndRemoveUntil(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => const OrderHistoryPage(),
+                        ),
+                        (Route<dynamic> route) => false,
+                      );
+                    },
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: const Color(0xFFA47551),
+                      foregroundColor: Colors.white,
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 40,
+                        vertical: 14,
+                      ),
+                    ),
+                    child: const Text(
+                      "Pesan Sekarang",
+                      style: TextStyle(fontSize: 16),
+                    ),
+                  ),
+                ],
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

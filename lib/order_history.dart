@@ -1,16 +1,13 @@
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
-import '../models/order_data_model.dart';
-import 'order_detail_page.dart';
+import '../models/cart_model.dart';
+import 'home.dart'; // pastikan sudah ada file ini
 
 class OrderHistoryPage extends StatelessWidget {
-  // Ubah required menjadi default kosong agar CartPage bisa memanggil tanpa argumen
-  final List<Orderdata> history;
-  const OrderHistoryPage({super.key, this.history = const []});
+  const OrderHistoryPage({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final format = NumberFormat.currency(locale: 'id_ID', symbol: 'Rp ');
+    final orders = CartModel.orderHistory;
 
     return Scaffold(
       appBar: AppBar(
@@ -19,54 +16,71 @@ class OrderHistoryPage extends StatelessWidget {
         foregroundColor: Colors.white,
       ),
       backgroundColor: const Color(0xFFF5E1C0),
-      body: history.isEmpty
+      body: orders.isEmpty
           ? const Center(
               child: Text(
-                "Belum ada riwayat pesanan 🍰",
-                style: TextStyle(fontSize: 16, color: Color(0xFF4E342E)),
+                "Belum ada riwayat pesanan ☕",
+                style: TextStyle(color: Color(0xFF4E342E), fontSize: 16),
               ),
             )
           : ListView.builder(
-              itemCount: history.length,
+              padding: const EdgeInsets.all(16),
+              itemCount: orders.length,
               itemBuilder: (context, index) {
-                final order = history[index];
+                final order = orders[index];
                 return Card(
-                  margin:
-                      const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+                  margin: const EdgeInsets.symmetric(vertical: 8),
                   child: ListTile(
                     leading: const Icon(Icons.receipt_long,
                         color: Color(0xFFA47551)),
-                    title: Text(order.nama),
+                    title: Text(
+                      "Pesanan oleh: ${order.customerName}",
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF4E342E),
+                      ),
+                    ),
                     subtitle: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text("Alamat: ${order.alamat}"),
-                        Text("Metode: ${order.metode}"),
-                        Text("Total: ${format.format(order.total)}"),
-                        Text(
-                          "Tanggal: ${DateFormat('dd/MM/yyyy HH:mm').format(order.tanggal)}",
-                        ),
-                        Text("Status: ${order.status}"),
                         const SizedBox(height: 4),
-                        Text(
-                          "Item: ${order.items.join(', ')}",
-                          style: const TextStyle(fontSize: 12),
+                        Text("Alamat: ${order.address}"),
+                        Text("Metode: ${order.paymentMethod}"),
+                        Text("Total: Rp ${order.total}"),
+                        const SizedBox(height: 6),
+                        const Text(
+                          "Item:",
+                          style: TextStyle(fontWeight: FontWeight.bold),
                         ),
+                        ...order.items.map((item) => Text("- $item")).toList(),
                       ],
                     ),
-                    trailing: const Icon(Icons.arrow_forward_ios, size: 16),
-                    onTap: () {
-                      Navigator.push(
-                        context,
-                        MaterialPageRoute(
-                          builder: (context) => OrderDetailPage(order: order),
-                        ),
-                      );
-                    },
                   ),
                 );
               },
             ),
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: ElevatedButton.icon(
+          onPressed: () {
+            // ✅ hanya tambahkan userName agar tidak error
+            Navigator.pushAndRemoveUntil(
+              context,
+              MaterialPageRoute(
+                builder: (context) => const HomePage(userName: "Pengguna"),
+              ),
+              (Route<dynamic> route) => false,
+            );
+          },
+          style: ElevatedButton.styleFrom(
+            backgroundColor: const Color(0xFFA47551),
+            foregroundColor: Colors.white,
+            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+          ),
+          icon: const Icon(Icons.home),
+          label: const Text("Kembali ke Menu Utama"),
+        ),
+      ),
     );
   }
 }
