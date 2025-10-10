@@ -29,7 +29,6 @@ class _RegisterPageState extends State<RegisterPage> {
     String name = _nameController.text.trim();
     String email = _emailController.text.trim();
     String password = _passwordController.text.trim();
-
     if (name.isEmpty || email.isEmpty || password.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text("Semua field harus diisi!")),
@@ -54,20 +53,20 @@ class _RegisterPageState extends State<RegisterPage> {
     return Scaffold(
       appBar: AppBar(
         title: const Text("Register"),
-        backgroundColor: const Color(0xFFA47551), // coklat susu
+        backgroundColor: const Color(0xFFA47551),
       ),
-      backgroundColor: const Color(0xFFF5E6D3), // cream polos
+      backgroundColor: const Color(0xFFF5E1C0),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
           child: Container(
             padding: const EdgeInsets.all(20),
             decoration: BoxDecoration(
-              color: Colors.white, // kotak putih
+              color: const Color(0xFFFFF8F1),
               borderRadius: BorderRadius.circular(10),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withOpacity(0.1),
+                  color: Colors.black.withOpacity(0.06),
                   blurRadius: 10,
                   offset: const Offset(0, 5),
                 ),

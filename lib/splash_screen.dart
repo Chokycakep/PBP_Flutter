@@ -24,29 +24,29 @@ class _SplashScreenState extends State<SplashScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFFE6D3), // cream
+      backgroundColor: const Color(0xFFF5E1C0),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Image.asset(
-              "assets/logo.png", // logo dari kamu
-              width: 120,
-              height: 120,
+              "assets/logo.png",
+              width: 130,
+              height: 130,
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 24),
             const Text(
               "Caramel Cafe & Bakery",
               style: TextStyle(
-                fontSize: 24,
+                fontSize: 26,
                 fontWeight: FontWeight.bold,
                 color: Color(0xFF4E342E),
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 8),
             const Text(
-              "by [Putu Novita Darmadewi]",
-              style: TextStyle(fontSize: 16, color: Colors.black54),
+              "by Putu Novita Darmadewi",
+              style: TextStyle(fontSize: 14, color: Colors.black54),
             ),
           ],
         ),

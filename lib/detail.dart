@@ -1,59 +1,103 @@
 import 'package:flutter/material.dart';
-import 'models/cake_model.dart';
+import '../models/cake_model.dart';
+import '../models/cart_model.dart';
+import 'cake_detail_view.dart';
+import 'cart_page.dart';
 
-class DetailPage extends StatelessWidget {
-  final CakeModel cake;
+/// Halaman utama daftar kue
+class DetailPage extends StatefulWidget {
+  const DetailPage({super.key});
 
-  const DetailPage({super.key, required this.cake});
-
-  // Data produk dipusatkan di sini
   static final List<CakeModel> cakes = [
     CakeModel(
-      name: "Produk Kue 1",
+      name: "Kue Cokelat Lumer",
       price: 25000,
-      description: "Kue lezat dengan topping cokelat 🍫",
+      description: "Kue cokelat dengan tekstur lembut dan lumer di mulut 🍫",
     ),
     CakeModel(
-      name: "Produk Kue 2",
+      name: "Kue Keju Spesial",
       price: 30000,
-      description: "Kue vanila lembut dengan krim vanilla 🍦",
+      description: "Kue keju lembut dengan rasa manis gurih khas 🧀",
     ),
     CakeModel(
-      name: "Produk Kue 3",
+      name: "Kue Red Velvet",
       price: 28000,
-      description: "Kue red velvet premium dengan cream cheese ❤️",
+      description: "Kue red velvet klasik dengan cream cheese lezat ❤️",
     ),
     CakeModel(
-      name: "Produk Kue 4",
-      price: 35000,
-      description: "Kue keju meleleh dengan tekstur lembut 🧀",
-    ),
-    CakeModel(
-      name: "Produk Kue 5",
+      name: "Kue Kopi Caramel",
       price: 27000,
-      description: "Kue kopi wangi khas Caramel Cafe ☕",
+      description: "Kue aroma kopi dengan sentuhan caramel nikmat ☕",
     ),
   ];
 
   @override
+  State<DetailPage> createState() => _DetailPageState();
+}
+
+class _DetailPageState extends State<DetailPage> {
+  void _addToCart(CakeModel cake) {
+    setState(() {
+      CartModel.addToCart(cake);
+    });
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: Text("${cake.name} ditambahkan ke keranjang 🛒"),
+        backgroundColor: const Color(0xFFA47551),
+        duration: const Duration(seconds: 2),
+      ),
+    );
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text(cake.name)),
-      body: Padding(
-        padding: const EdgeInsets.all(20.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text(
-              cake.name,
-              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+      backgroundColor: const Color(0xFFF5E1C0),
+      appBar: AppBar(
+        title: const Text("Daftar Kue"),
+        backgroundColor: const Color(0xFFA47551),
+        foregroundColor: Colors.white,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.shopping_cart),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const CartPage()),
+              ).then((_) => setState(() {}));
+            },
+          ),
+        ],
+      ),
+      body: ListView.builder(
+        itemCount: DetailPage.cakes.length,
+        itemBuilder: (context, index) {
+          final cake = DetailPage.cakes[index];
+          return Card(
+            margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            child: ListTile(
+              leading: const Icon(Icons.cake, color: Color(0xFFA47551)),
+              title: Text(cake.name),
+              subtitle: Text("Rp ${cake.price}"),
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => CakeDetailView(cake: cake),
+                  ),
+                );
+              },
+              trailing: ElevatedButton(
+                onPressed: () => _addToCart(cake),
+                style: ElevatedButton.styleFrom(
+                  backgroundColor: const Color(0xFFA47551),
+                  foregroundColor: Colors.white,
+                ),
+                child: const Text("Tambah"),
+              ),
             ),
-            const SizedBox(height: 10),
-            Text("Harga: Rp ${cake.price}"),
-            const SizedBox(height: 10),
-            Text("Deskripsi: ${cake.description}"),
-          ],
-        ),
+          );
+        },
       ),
     );
   }

@@ -32,9 +32,7 @@ class _LoginPageState extends State<LoginPage> {
       // tetap bisa login meskipun salah
       Navigator.pushReplacement(
         context,
-        MaterialPageRoute(
-          builder: (context) => HomePage(userName: "Guest"),
-        ),
+        MaterialPageRoute(builder: (context) => HomePage(userName: "Guest")),
       );
     }
   }
@@ -45,14 +43,12 @@ class _LoginPageState extends State<LoginPage> {
       appBar: AppBar(
         title: const Text(
           "Login",
-          style: TextStyle(
-            fontWeight: FontWeight.bold,
-          ),
+          style: TextStyle(fontWeight: FontWeight.bold),
         ),
-        backgroundColor: const Color(0xFFA47551), // Warna coklat susu
+        backgroundColor: const Color(0xFFA47551),
         centerTitle: false,
       ),
-      backgroundColor: const Color(0xFFF5E6D3), // Background cream polos
+      backgroundColor: const Color(0xFFF5E1C0),
       body: Center(
         child: SingleChildScrollView(
           padding: const EdgeInsets.all(20),
@@ -60,7 +56,7 @@ class _LoginPageState extends State<LoginPage> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
-                "assets/logo.png", // Logo aplikasi
+                "assets/logo.png",
                 width: 100,
                 height: 100,
               ),
@@ -68,11 +64,11 @@ class _LoginPageState extends State<LoginPage> {
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(
-                  color: Colors.white, // Warna kotak putih
+                  color: const Color(0xFFFFF8F1),
                   borderRadius: BorderRadius.circular(10),
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
+                      color: Colors.black.withOpacity(0.06),
                       blurRadius: 10,
                       offset: const Offset(0, 5),
                     ),
@@ -109,22 +105,16 @@ class _LoginPageState extends State<LoginPage> {
               ElevatedButton(
                 onPressed: _login,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor:
-                      const Color(0xFFA47551), // Tombol coklat susu
-                  padding: const EdgeInsets.symmetric(
-                    horizontal: 40,
-                    vertical: 15,
-                  ),
+                  backgroundColor: const Color(0xFFA47551),
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
                 child: const Text(
                   "Login",
-                  style: TextStyle(
-                    fontSize: 16,
-                    color: Colors.white, // Teks putih
-                  ),
+                  style: TextStyle(fontSize: 16, color: Colors.white),
                 ),
               ),
               const SizedBox(height: 10),
@@ -133,13 +123,12 @@ class _LoginPageState extends State<LoginPage> {
                   Navigator.push(
                     context,
                     MaterialPageRoute(
-                      builder: (context) => const RegisterPage(),
-                    ),
+                        builder: (context) => const RegisterPage()),
                   );
                 },
                 child: const Text(
                   "Belum punya akun? Register",
-                  style: TextStyle(color: Colors.black), // Hitam biar jelas
+                  style: TextStyle(color: Colors.black),
                 ),
               ),
             ],

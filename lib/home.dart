@@ -1,21 +1,32 @@
 import 'package:flutter/material.dart';
-import 'detail.dart';
+import 'detail.dart'; // ✅ ubah dari 'pages/detail_page.dart' ke 'detail.dart'
+import 'cart_page.dart';
+// tetap karena kamu sudah pisahkan cart di folder pages
 
 class HomePage extends StatelessWidget {
   final String userName;
-  HomePage({super.key, required this.userName});
+  const HomePage({super.key, required this.userName});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFFE6D3),
+      backgroundColor: const Color(0xFFF5E1C0),
       appBar: AppBar(
         title: const Text("Caramel Cafe & Bakery"),
         backgroundColor: const Color(0xFFA47551),
         foregroundColor: Colors.white,
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.shopping_cart),
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const CartPage()),
+              );
+            },
+          ),
+        ],
       ),
-
-      // HAMBURGER MENU (Drawer)
       drawer: Drawer(
         child: ListView(
           padding: EdgeInsets.zero,
@@ -35,7 +46,7 @@ class HomePage extends StatelessWidget {
               leading: const Icon(Icons.home),
               title: const Text("Beranda"),
               onTap: () {
-                Navigator.pop(context); // Tutup drawer
+                Navigator.pop(context);
               },
             ),
             ListTile(
@@ -43,8 +54,9 @@ class HomePage extends StatelessWidget {
               title: const Text("Keranjang"),
               onTap: () {
                 Navigator.pop(context);
-                ScaffoldMessenger.of(context).showSnackBar(
-                  const SnackBar(content: Text("Menu Keranjang diklik")),
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => const CartPage()),
                 );
               },
             ),
@@ -59,11 +71,10 @@ class HomePage extends StatelessWidget {
           ],
         ),
       ),
-
       body: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Selamat Datang
+          // Sapaan pengguna
           Padding(
             padding: const EdgeInsets.all(16.0),
             child: Text(
@@ -76,7 +87,7 @@ class HomePage extends StatelessWidget {
             ),
           ),
 
-          // ListView produk
+          // Daftar produk
           Expanded(
             child: ListView.builder(
               itemCount: DetailPage.cakes.length,
@@ -89,11 +100,13 @@ class HomePage extends StatelessWidget {
                     leading: const Icon(Icons.cake, color: Color(0xFFA47551)),
                     title: Text(cake.name),
                     subtitle: Text("Rp ${cake.price}"),
+                    trailing: const Icon(Icons.arrow_forward_ios_rounded,
+                        color: Color(0xFFA47551), size: 18),
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => DetailPage(cake: cake),
+                          builder: (context) => const DetailPage(),
                         ),
                       );
                     },
