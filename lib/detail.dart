@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import '../models/cake_model.dart';
 import '../models/cart_model.dart';
 import 'cart_page.dart';
+import 'review_page.dart'; // ✅ Tambahan import untuk halaman ulasan
 
 /// ✅ Halaman Kategori Menu
 class CakeListPage extends StatelessWidget {
@@ -101,31 +102,62 @@ class MenuListPage extends StatelessWidget {
           final item = menus[index];
           return Card(
             margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-            child: ListTile(
-              title: Text(item["name"]!),
-              subtitle: Text(item["desc"]!),
-              trailing: ElevatedButton(
-                onPressed: () {
-                  final cake = CakeModel(
-                    name: item["name"]!,
-                    price: 20000, // bisa diubah sesuai harga nanti
-                    description: item["desc"]!,
-                  );
-                  CartModel.addToCart(cake);
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    SnackBar(
-                      content:
-                          Text("${item["name"]} ditambahkan ke keranjang 🛒"),
-                      backgroundColor: const Color(0xFFA47551),
-                      duration: const Duration(seconds: 2),
-                    ),
-                  );
-                },
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFA47551),
-                  foregroundColor: Colors.white,
-                ),
-                child: const Text("Tambah"),
+            child: Padding(
+              padding: const EdgeInsets.all(12.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(item["name"]!,
+                      style: const TextStyle(
+                          fontWeight: FontWeight.bold, fontSize: 16)),
+                  const SizedBox(height: 4),
+                  Text(item["desc"]!),
+                  const SizedBox(height: 8),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      ElevatedButton(
+                        onPressed: () {
+                          final cake = CakeModel(
+                            name: item["name"]!,
+                            price: 20000,
+                            description: item["desc"]!,
+                          );
+                          CartModel.addToCart(cake);
+                          ScaffoldMessenger.of(context).showSnackBar(
+                            SnackBar(
+                              content: Text(
+                                  "${item["name"]} ditambahkan ke keranjang 🛒"),
+                              backgroundColor: const Color(0xFFA47551),
+                              duration: const Duration(seconds: 2),
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFFA47551),
+                          foregroundColor: Colors.white,
+                        ),
+                        child: const Text("Tambah"),
+                      ),
+                      // ✅ Tombol tambahan untuk lihat ulasan
+                      ElevatedButton(
+                        onPressed: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const ReviewPage(),
+                            ),
+                          );
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: const Color(0xFF8D6E63),
+                          foregroundColor: Colors.white,
+                        ),
+                        child: const Text("Lihat Ulasan"),
+                      ),
+                    ],
+                  ),
+                ],
               ),
             ),
           );

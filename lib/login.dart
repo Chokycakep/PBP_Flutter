@@ -55,12 +55,26 @@ class _LoginPageState extends State<LoginPage> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
+              // ✅ Tambahan teks “Caramel Cafe & Bakery”
+              const Text(
+                "Caramel Cafe & Bakery",
+                style: TextStyle(
+                  fontSize: 26,
+                  fontWeight: FontWeight.bold,
+                  color: Color(0xFFA47551),
+                  letterSpacing: 1.2,
+                ),
+              ),
+              const SizedBox(height: 10),
+
+              // ✅ Logo tetap di bawah judul
               Image.asset(
                 "assets/logo.png",
                 width: 100,
                 height: 100,
               ),
               const SizedBox(height: 20),
+
               Container(
                 padding: const EdgeInsets.all(20),
                 decoration: BoxDecoration(

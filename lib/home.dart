@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'detail.dart'; // ✅ hanya butuh CakeListPage
 import 'cart_page.dart';
 import 'order_history.dart';
+import 'about_us.dart'; // ✅ Tambahan import untuk halaman About Us
+import 'login.dart'; // ✅ Tambahan supaya tombol Logout bisa berfungsi
 
 class HomePage extends StatelessWidget {
   final String userName;
@@ -73,12 +75,32 @@ class HomePage extends StatelessWidget {
                 );
               },
             ),
+            // ✅ Tambahan menu About Us (tanpa ubah kode lain)
+            ListTile(
+              leading: const Icon(Icons.info_outline),
+              title: const Text("Tentang Kami"),
+              onTap: () {
+                Navigator.pop(context);
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const AboutUsPage(),
+                  ),
+                );
+              },
+            ),
             ListTile(
               leading: const Icon(Icons.logout),
               title: const Text("Logout"),
               onTap: () {
                 Navigator.pop(context);
-                Navigator.pushReplacementNamed(context, "/login");
+                // ✅ Perbaikan agar tombol logout bisa berfungsi
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => const LoginPage(),
+                  ),
+                );
               },
             ),
           ],
